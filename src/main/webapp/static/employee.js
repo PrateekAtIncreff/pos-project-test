@@ -92,6 +92,9 @@ function processData(){
 
 function readFileDataCallback(results){
 	fileData = results.data;
+//	if(fileData.length>5000){
+//	//DO SOMETHING
+//	}
 	uploadRows();
 }
 
