@@ -26,6 +26,7 @@ public class BrandService {
         if(StringUtil.isEmpty(p.getCategory())) {
             throw new ApiException("Category cannot be empty");
         }
+        //Brand - Category combination should be unique
         if(dao.checkForCombination(p.getBrand(),p.getCategory()) != null){
             throw new ApiException("Brand - Category combination already exists");
         }
@@ -40,9 +41,19 @@ public class BrandService {
 
     //UPDATE
     @Transactional(rollbackOn  = ApiException.class)
-    public void update(int id, BrandPojo p) throws ApiException{
+    public void update(int id, BrandPojo p) throws ApiException{ //TODO Check for uniquness in update statement...
         normalize(p);
         BrandPojo toUpdate = getCheck(id);
+        if(StringUtil.isEmpty(p.getBrand())) {
+            throw new ApiException("Brand cannot be empty");
+        }
+        if(StringUtil.isEmpty(p.getCategory())) {
+            throw new ApiException("Category cannot be empty");
+        }
+        BrandPojo checker = dao.checkForCombination(p.getBrand(),p.getCategory());
+        if(checker != null && dao.select(id) != checker){
+            throw new ApiException("Brand - Category combination already exists");
+        }
         toUpdate.setCategory(p.getCategory());
         toUpdate.setBrand(p.getBrand());
     }

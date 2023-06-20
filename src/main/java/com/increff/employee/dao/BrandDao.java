@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class BrandDao extends AbstractDao{
-    private static String delete_id = "delete from BrandPojo p where id=:id";
     private static String select_id = "select p from BrandPojo p where id=:id";
     private static String select_all = "select p from BrandPojo p";
     private static String combination_checker = "select p from BrandPojo p where brand=:brand and category= :category";
@@ -42,6 +41,8 @@ public class BrandDao extends AbstractDao{
         query.setParameter("category", category);
         return getSingle(query);
     }
+
+    //Update does not have any query, it is handled by BrandService
     public void update(BrandPojo p){
     }
 }
