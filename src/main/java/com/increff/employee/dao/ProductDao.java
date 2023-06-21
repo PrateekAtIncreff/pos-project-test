@@ -21,7 +21,7 @@ public class ProductDao extends AbstractDao{
     private EntityManager em;
 
     @Transactional
-    public void insert(ProductPojo p){em.persist(p);}
+    public void insert(ProductPojo pojo){em.persist(pojo);}
 
     public ProductPojo select(int id){
         TypedQuery<ProductPojo> query = getQuery(select_id, ProductPojo.class);
@@ -37,7 +37,7 @@ public class ProductDao extends AbstractDao{
         query.setParameter("id", id);
         return getSingle(query);
     }
-    public ProductPojo checkDuplicateBarcode(String barcode){
+    public ProductPojo checkBarcode(String barcode){
         TypedQuery<ProductPojo> query = getQuery(duplicate_check, ProductPojo.class);
         query.setParameter("barcode", barcode);
         return getSingle(query);
