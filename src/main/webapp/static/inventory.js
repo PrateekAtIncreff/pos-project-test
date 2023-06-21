@@ -66,18 +66,6 @@ function getInventoryList(){
 	});
 }
 
-function deleteInventory(id){
-	var url = getInventoryUrl() + "/" + id;
-
-	$.ajax({
-	   url: url,
-	   type: 'DELETE',
-	   success: function(data) {
-	   		getInventoryList();
-	   },
-	   error: handleAjaxError
-	});
-}
 
 // FILE UPLOAD METHODS
 var fileData = [];
@@ -106,14 +94,14 @@ function uploadRows(){
 	//Process next row
 	var row = fileData[processCount];
 	processCount++;
-
+    id = row.id;
 	var json = JSON.stringify(row);
-	var url = getInventoryUrl();
+	var url = getInventoryUrl() + "/" + id;
 
 	//Make ajax call
 	$.ajax({
 	   url: url,
-	   type: 'POST',
+	   type: 'PUT',
 	   data: json,
 	   headers: {
        	'Content-Type': 'application/json'
@@ -141,7 +129,6 @@ function displayInventoryList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-    	var buttonHtml = '<button onclick="deleteInventory(' + e.id + ')">delete</button>'
 		var buttonHtml = ' <button onclick="displayEditInventory(' + e.id + ')">edit</button>'
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
