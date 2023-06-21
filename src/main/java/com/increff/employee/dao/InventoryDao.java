@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class InventoryDao extends AbstractDao{
     private String select_id = "select p from InventoryPojo p where id=:id";
-    private String select_all = "select p from InventoryPojo p";
+    private String select_all = "select i from InventoryPojo i";
 
 
     @PersistenceContext

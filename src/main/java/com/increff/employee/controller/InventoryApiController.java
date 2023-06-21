@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.increff.employee.model.InventoryData;
+import com.increff.employee.model.InventoryForm;
 import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,17 +32,13 @@ public class InventoryApiController {
     }
     @ApiOperation(value = "Gets list of all inventory data")
     @RequestMapping(path = "/api/inventory", method = RequestMethod.GET)
-    public List<InventoryData> getAll(){
-        List<InventoryPojo> pojoList = service.getAll();
-        List<InventoryData> dataList = new ArrayList<InventoryData>();
-        for(InventoryPojo pojo: pojoList){
-            dataList.add(convert(pojo));
-        }
+    public List<InventoryData> getAll() throws ApiException {
+        List<InventoryData> dataList = service.getAll();
         return dataList;
     }
     @ApiOperation(value = "Updates a record")
     @RequestMapping(path = "/api/inventory/{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable int id, @RequestBody InventoryData form) throws ApiException{
+    public void update(@PathVariable int id, @RequestBody InventoryForm form) throws ApiException{
         InventoryPojo pojo = convert(form);
         service.update(id, pojo);
     }
@@ -52,10 +49,9 @@ public class InventoryApiController {
         data.setQuantity(pojo.getQuantity());
         return data;
     }
-    private static InventoryPojo convert(InventoryData data){
+    private static InventoryPojo convert(InventoryForm form){
         InventoryPojo pojo = new InventoryPojo();
-        pojo.setId(data.getId());
-        pojo.setQuantity(data.getQuantity());
+        pojo.setQuantity(form.getQuantity());
         return pojo;
     }
 }
