@@ -39,7 +39,7 @@ public class ProductService {
         if(dao.checkIfBrandIdExists(p.getBrand_category()) == null){
             throw new ApiException("There is no Brand-Category combination for given data");
         }
-        if(dao.checkBarcode(barcode) != null){
+        if(getByBarcode(barcode) != null){
             throw new ApiException("Product Barcode already exists");
         }
         dao.insert(p);
@@ -57,6 +57,7 @@ public class ProductService {
     @Transactional(rollbackOn  = ApiException.class)
     public void update(int id, ProductPojo p) throws ApiException{
         normalize(p);
+        //Same checks as that in add
         if(StringUtil.isEmpty(p.getBarcode())) {
             throw new ApiException("Barcode cannot be empty");
         }
@@ -70,7 +71,7 @@ public class ProductService {
         if(dao.checkIfBrandIdExists(p.getBrand_category()) == null){
             throw new ApiException("There is no Brand-Category combination for given data");
         }
-        ProductPojo checker = dao.checkBarcode(p.getBarcode());
+        ProductPojo checker = getByBarcode(p.getBarcode());
         if(checker != null && dao.select(id) != checker){
             throw new ApiException("Product Barcode already exists");
         }
@@ -95,5 +96,9 @@ public class ProductService {
     protected static void normalize(ProductPojo p) {
         p.setBarcode(p.getBarcode().toLowerCase ().trim());
         p.setName(p.getName().toLowerCase ().trim());
+    }
+    @Transactional(rollbackOn = ApiException.class)
+    public ProductPojo getByBarcode(String barcode) throws ApiException{
+        return dao.checkBarcode(barcode);
     }
 }

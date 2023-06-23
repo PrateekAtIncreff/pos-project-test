@@ -209,12 +209,15 @@ function displayBrand(data){
 	$('#edit-product-modal').modal('toggle');
 }
 
+function refresh(){
+    location.reload(true);
+}
 
 //INITIALIZATION CODE
 function init(){
 	$('#add-product').click(addBrand);
 	$('#update-product').click(updateBrand);
-	$('#refresh-data').click(getBrandList);
+	$('#refresh-data').click(refresh);
 	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);

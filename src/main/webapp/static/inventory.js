@@ -187,12 +187,14 @@ function displayInventory(data){
 	$('#edit-inventory-modal').modal('toggle');
 }
 
-
+function refresh(){
+    location.reload(true);
+}
 //INITIALIZATION CODE
 function init(){
 	$('#add-inventory').click(addInventory);
 	$('#update-inventory').click(updateInventory);
-	$('#refresh-data').click(getInventoryList);
+	$('#refresh-data').click(refresh);
 	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
