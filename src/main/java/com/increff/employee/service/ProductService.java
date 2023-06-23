@@ -99,6 +99,10 @@ public class ProductService {
     }
     @Transactional(rollbackOn = ApiException.class)
     public ProductPojo getByBarcode(String barcode) throws ApiException{
-        return dao.checkBarcode(barcode);
+        ProductPojo pojo = dao.checkBarcode(barcode);
+        if(pojo==null){
+            throw new ApiException("Product with given barcode not found");
+        }
+        return pojo;
     }
 }
