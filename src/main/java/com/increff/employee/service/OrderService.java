@@ -26,9 +26,9 @@ public class OrderService {
     @Autowired
     InventoryService inventoryService;
 
-    private int orderId;
+    private int orderId=0;
     @Transactional(rollbackOn = ApiException.class)
-    public void add(List<OrderItemForm> formList) throws ApiException{
+    public int add(List<OrderItemForm> formList) throws ApiException{
         if(formList.size()<1){
             throw new ApiException("Frontend Validation Breach: Empty Order List Not Supported");
         }
@@ -37,6 +37,7 @@ public class OrderService {
         pojo.setDate_time(dateTime);
         orderId = dao.insert(pojo).getId();
         addItems(formList);
+        return orderId;
     }
     @Transactional(rollbackOn = ApiException.class)
     public void addItems(List<OrderItemForm> formList) throws ApiException{
@@ -67,6 +68,11 @@ public class OrderService {
     @Transactional
     public List<OrderPojo> getAll(){
         return dao.selectAll();
+    }
+
+    public void checkValidity(OrderItemForm form) throws ApiException{
+        OrderItemPojo pojo = convert(form);
+        orderItemService.checks(pojo);
     }
     private OrderItemPojo convert(OrderItemForm form) throws ApiException {
         normalize(form);

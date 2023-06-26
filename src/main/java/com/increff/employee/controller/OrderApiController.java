@@ -29,9 +29,15 @@ public class OrderApiController {
 
     @ApiOperation(value = "Adds a order combination to database")
     @RequestMapping(path = "/api/order", method = RequestMethod.POST)
-    public void add(@RequestBody List<OrderItemForm> forms) throws ApiException{
-        orderService.add(forms);
+    public int add(@RequestBody List<OrderItemForm> forms) throws ApiException{
+      return  orderService.add(forms);
 
+    }
+
+    @ApiOperation(value = "Checks if the entered form is valid for submission")
+    @RequestMapping(path = "/api/order/check", method = RequestMethod.POST)
+    public void checking(@RequestBody OrderItemForm form) throws ApiException{
+        orderService.checkValidity(form);
     }
 
     @ApiOperation(value = "Gets all orders in a particular orderId")
