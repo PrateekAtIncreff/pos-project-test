@@ -47,7 +47,7 @@ public class OrderApiController {
     }
 
     @ApiOperation(value = "Gets all orders in OrderPojo")
-    @RequestMapping(path = "/api/order/", method = RequestMethod.GET)
+    @RequestMapping(path = "/api/order", method = RequestMethod.GET)
     public List<OrderPojo> getListOrder() throws ApiException{
         return orderService.getAll();
     }

@@ -16,7 +16,7 @@ function addProduct(event){
 	formData[0].value = formData[0].value.toLowerCase().trim();
 	//Frontend Validations
 	if(parseInt(formData[1].value)<=0)
-	    alert("Please enter a positive value for Quantity);
+	    alert("Please enter a positive value for Quantity");
 	if(parseFloat(formData[2].value)<0)
 	    alert("Selling price cannot be negative");
 	for(var i in jsonData){
@@ -164,7 +164,6 @@ function refresh(){
 }
 //INITIALIZATION CODE
 function init(){
-    document.getElementById("upload-data").disabled = true;
 	$('#add-product').click(addProduct);
 	$('#upload-data').click(submit);
 	$('#update-order').click(updateOrder);
