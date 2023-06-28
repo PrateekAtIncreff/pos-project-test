@@ -27,14 +27,55 @@ function getSalesList(event) {
 
 let initialData = [];
 //UI DISPLAY METHODS
-//TODO display for given brand category combination
+
+function displayFilteredReport(){
+    var $tbody = $('#brand-report-table').find('tbody');
+    $tbody.empty();
+    var brand = document.forms["brand-form"]["brand"].value;
+    var category = document.forms["brand-form"]["category"].value;
+    if(brand == null || brand ==""){
+        alert("Please fill Brand Data before applying filter");
+        return;
+    }
+    var flag = 0;
+    for(var i in initialData){
+        var element = initialData[i];
+        if(element.brand == brand){
+            if(category == null || category == ""){
+                var row = '<tr>'
+                		+ '<td>' + element.brand + '</td>'
+                		+ '<td>' + element.category + '</td>'
+                		+ '<td>' + element.quantity + '</td>'
+                		+ '<td>' + element.revenue + '</td>'
+                		+ '</tr>';
+                $tbody.append(row);
+                flag=1;
+            }
+            else if(element.category == category){
+            var row = '<tr>'
+                    + '<td>' + element.brand + '</td>'
+                    + '<td>' + element.category + '</td>'
+                    + '<td>' + element.quantity + '</td>'
+                    + '<td>' + element.revenue + '</td>'
+                    + '</tr>';
+            $tbody.append(row);
+            flag=1;
+            }
+        }
+    }
+
+    if(flag == 0){
+        var row = '<tr><td>No transaction for given brand - category found in given timeframe</td></tr>';
+        $tbody.append(row);
+    }
+
+}
 function displaySalesReportList(data){
 	var $tbody = $('#brand-report-table').find('tbody');
 	$tbody.empty();
 	initialData = data;
 	for(var i in data){
 		var e = data[i];
-		console.log(e);
 		var row = '<tr>'
 		+ '<td>' + e.brand + '</td>'
 		+ '<td>' + e.category + '</td>'
@@ -48,6 +89,7 @@ function displaySalesReportList(data){
 	    $tbody.append(row);
 	}
 	$("#apply-brand-filter").removeAttr("disabled");
+	$("#refresh-data").removeAttr("disabled");
 }
 
 
@@ -62,9 +104,16 @@ function validateDate(input) {
     input.setCustomValidity("");
   }
 }
+function refreshData(){
+    console.log("inside refresh");
+    displaySalesReportList(initialData);
+}
 //INITIALIZATION CODE
 function init() {
    $("#apply-filter").click(getSalesList);
+   $("#apply-brand-filter").click(displayFilteredReport);
+   $("#refresh-data").click(refreshData);
+
     var dateInput = document.getElementById("inputSD");
     var dateInput2 = document.getElementById("inputED");
     var today = new Date();
