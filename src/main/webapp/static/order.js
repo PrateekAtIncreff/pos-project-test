@@ -57,6 +57,7 @@ function displayOrderItems(data){
         let amount = parseInt(e.quantity) * parseFloat(e.selling_price);
         var row = '<tr>'
         + '<td>' + e.barcode + '</td>'
+        + '<td>' + e.name + '</td>'
         + '<td>' + e.quantity + '</td>'
         + '<td>' + e.selling_price + '</td>'
         + '<td>' + amount + '</td>'

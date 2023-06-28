@@ -50,6 +50,7 @@ public class OrderItemService {
         data.setId(pojo.getId());
         data.setOrder_id(pojo.getOrder_id());
         data.setProduct_id(pojo.getProduct_id());
+        data.setName(productService.get(pojo.getProduct_id()).getName());
         data.setBarcode(productService.get(pojo.getProduct_id()).getBarcode());
         data.setQuantity(pojo.getQuantity());
         data.setSelling_price(pojo.getSelling_price());

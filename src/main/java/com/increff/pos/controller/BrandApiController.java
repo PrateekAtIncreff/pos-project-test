@@ -38,7 +38,7 @@ public class BrandApiController {
         return convert(pojo);
     }
 
-    @ApiOperation(value = "Gets list of all brand-category combination")
+    @ApiOperation(value = "Gets list of all brand-category combination (Also used for brand report)")
     @RequestMapping(path = "/api/brand", method = RequestMethod.GET)
     public List<BrandData> getAll(){
         List<BrandPojo> list = service.getAll();

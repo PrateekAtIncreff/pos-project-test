@@ -9,6 +9,7 @@ import com.increff.pos.model.OrderItemForm;
 import com.increff.pos.pojo.InventoryPojo;
 import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.OrderPojo;
+import com.sun.org.apache.xpath.internal.operations.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -65,6 +66,11 @@ public class OrderService {
     @Transactional
     public List<OrderPojo> getAll(){
         return dao.selectAll();
+    }
+
+    @Transactional
+    public List<OrderPojo> getByDate(LocalDateTime startDate, LocalDateTime endDate){
+        return dao.getByDate(startDate,endDate);
     }
 
     public void checkValidity(OrderItemForm form) throws ApiException{

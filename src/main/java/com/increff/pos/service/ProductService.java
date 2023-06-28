@@ -104,4 +104,6 @@ public class ProductService {
         }
         return pojo;
     }
+    @Transactional
+    public List<ProductPojo> getByBrand(int id){return  dao.getByBrand(id);}
 }
