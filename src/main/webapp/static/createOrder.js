@@ -15,10 +15,14 @@ function addProduct(event){
 	var idOfDuplicate;
 	formData[0].value = formData[0].value.toLowerCase().trim();
 	//Frontend Validations
-	if(parseInt(formData[1].value)<=0)
+	if(parseInt(formData[1].value)<=0){
 	    alert("Please enter a positive value for Quantity");
-	if(parseFloat(formData[2].value)<0)
+	    return;
+	    }
+	if(parseFloat(formData[2].value)<0){
 	    alert("Selling price cannot be negative");
+	    return;
+	    }
 	for(var i in jsonData){
 	    var element = jsonData[i];
 	    if(element.barcode.localeCompare(formData[0].value)==0){
@@ -65,6 +69,9 @@ function submit(event){
        	'Content-Type': 'application/json'
        },
 	   success: function(response) {
+	        var baseUrl = $("meta[name=baseUrl]").attr("content");
+	        var redirectUrl = baseUrl + "/ui/order";
+	        window.location.href = redirectUrl;
 	   		//TODO REDIRECT TO INVOICE GENERATION...
 	   },
 	   error: handleAjaxError

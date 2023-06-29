@@ -19,7 +19,16 @@ public class SchedulerService {
 
     @Transactional(rollbackOn = ApiException.class)
     public void add(SchedulerPojo pojo) throws ApiException{
-        schedulerDao.insert(pojo);
+        List<SchedulerPojo> checkerList = schedulerDao.selectByDate(pojo.getDate(), pojo.getDate());
+        if(checkerList.size() == 0) {
+            schedulerDao.insert(pojo);
+        }
+        else{
+            SchedulerPojo checker = checkerList.get(0);
+            checker.setTotal_revenue(pojo.getTotal_revenue());
+            checker.setInvoiced_orders_count(pojo.getInvoiced_orders_count());
+            checker.setInvoiced_items_count(pojo.getInvoiced_items_count());
+        }
     }
     @Transactional(rollbackOn = ApiException.class)
     public List<SchedulerPojo> getAll(){

@@ -30,7 +30,7 @@ public class SalesScheduler {
     @Autowired
     OrderItemService orderItemService;
     @Async
-    @Scheduled(cron = "30 59 23 * * *")
+    @Scheduled(cron = "59 59 23 * * *")
     public void createReport() throws ApiException {
         System.out.println("Ran Scheduler...");
         SchedulerPojo pojo = new SchedulerPojo();

@@ -22,6 +22,10 @@ public class OrderItemService {
     @Transactional(rollbackOn = ApiException.class)
     public void add(OrderItemPojo pojo) throws ApiException{
         checks(pojo);
+        //check for duplicate in same order.
+        if(dao.checkDuplicate(pojo.getProduct_id(), pojo.getOrder_id())!=null){
+            throw new ApiException("Frontend Validation Breach: Duplicate barcodes detected");
+        }
         dao.insert(pojo);
     }
 
@@ -76,9 +80,6 @@ public class OrderItemService {
         if(productService.get(pojo.getProduct_id()).getMrp()<pojo.getSelling_price()){
             throw new ApiException("Selling price cannot be more than MRP.");
         }
-        //check for duplicate in same order.
-        if(dao.checkDuplicate(pojo.getProduct_id(), pojo.getOrder_id())!=null){
-            throw new ApiException("Frontend Validation Breach: Duplicate barcodes detected");
-        }
+
     }
 }
