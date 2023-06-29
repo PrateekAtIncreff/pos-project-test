@@ -85,10 +85,14 @@ function updateOrder(){
     	var idOfDuplicate;
     	formData[0].value = formData[0].value.toLowerCase().trim();
     	//Frontend Validations
-        	if(parseInt(formData[1].value)<=0)
+        	if(parseInt(formData[1].value)<=0){
         	    alert("Please enter a positive value for Quantity");
-        	if(parseFloat(formData[2].value)<0)
+        	    return;
+        	    }
+        	if(parseFloat(formData[2].value)<0){
         	    alert("Selling price cannot be negative");
+        	    return;
+        	    }
     	for(var i in jsonData){
     	    var element = jsonData[i];
     	    if(element.barcode.localeCompare(formData[0].value)==0){
@@ -107,9 +111,8 @@ function updateOrder(){
                	'Content-Type': 'application/json'
                },
         	   success: function(response) {
-        	   		jsonData.splice(idOfDuplicate,1);
         	   		var jsonObject ={barcode: formData[0].value,quantity: parseInt(formData[1].value), selling_price: parseFloat(formData[2].value)}
-        	   		jsonData.push(jsonObject);
+        	   		jsonData.splice(idOfDuplicate,1, jsonObject);
         	   		updateTable(jsonData);
         	   		$('#edit-order-modal').modal('toggle');
         	   },
@@ -129,13 +132,15 @@ var $tbody = $('#order-item-table').find('tbody');
  for(var i in addedData){
            var e = addedData[i];
            let amount = parseInt(e.quantity) * parseFloat(e.selling_price);
-           buttonHtml = ' <button onclick="displayEditOrderDetail(' + i + ')">edit</button>'
+           editButtonHtml = ' <button onclick="displayEditOrderDetail(' + i + ')">Edit</button>';
+           deleteButtonHtml = ' <button onclick="deleteOrder(' + i + ')">Delete</button>';
            var row = '<tr>'
            + '<td>' + e.barcode + '</td>' //barcode
            + '<td>'  + e.quantity + '</td>' //mrp
            + '<td>'  + e.selling_price + '</td>' //quantity
            + '<td>'  + amount + '</td>' //total
-           + '<td>' + buttonHtml + '</td>'
+           + '<td>' + editButtonHtml + '</td>'
+           + '<td>' + deleteButtonHtml + '</td>'
            + '</tr>';
             $tbody.append(row)
             sum = sum+amount;
@@ -153,6 +158,10 @@ function displayEditOrderDetail(i){
     $('#edit-order-modal').modal('toggle');
 }
 
+function deleteOrder(id){
+    jsonData.splice(id,1);
+    updateTable(jsonData);
+}
 
 function fromSerializedToJson(serialized){
     var s = '';

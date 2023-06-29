@@ -37,6 +37,8 @@ function displayFilteredReport(){
         alert("Please fill Brand Data before applying filter");
         return;
     }
+    brand = brand.toLowerCase().trim();
+    category = category.toLowerCase().trim();
     var flag = 0;
     for(var i in initialData){
         var element = initialData[i];
