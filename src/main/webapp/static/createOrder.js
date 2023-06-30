@@ -1,7 +1,7 @@
 
 function getOrderUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/order";
+	return baseUrl + "/api/admin/order";
 }
 
 var jsonData = [];
@@ -183,6 +183,13 @@ function init(){
 	$('#add-product').click(addProduct);
 	$('#upload-data').click(submit);
 	$('#update-order').click(updateOrder);
+	var roleElement = document.getElementById('role');
+        var role = roleElement.innerText;
+        if(role=="operator"){
+            document.getElementById("add-product").disabled = true;
+            document.getElementById("upload-data").disabled = true;
+            document.getElementById("update-order").disabled = true;
+        }
 }
 
 $(document).ready(init);

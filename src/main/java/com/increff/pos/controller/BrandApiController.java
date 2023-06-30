@@ -25,7 +25,7 @@ public class BrandApiController {
     private BrandService service;
 
     @ApiOperation(value = "Adds a brand-category combination to database")
-    @RequestMapping(path = "/api/brand", method = RequestMethod.POST)
+    @RequestMapping(path = "/api/admin/brand", method = RequestMethod.POST)
     public void add(@RequestBody BrandForm form) throws ApiException{
         BrandPojo p = convert(form);
         service.add(p);
@@ -49,7 +49,7 @@ public class BrandApiController {
         return list2;
     }
     @ApiOperation(value = "Updates a record")
-    @RequestMapping(path = "/api/brand/{id}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/api/admin/brand/{id}", method = RequestMethod.PUT)
     public void update(@PathVariable int id, @RequestBody BrandForm form) throws ApiException{
         BrandPojo pojo = convert(form);
         service.update(id, pojo);

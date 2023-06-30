@@ -74,10 +74,15 @@ function refresh(){
 }
 //INITIALIZATION CODE
 function init(){
+    var roleElement = document.getElementById('role');
+    var role = roleElement.innerText;
 
+    if(role=="operator"){
+        document.getElementById("adminAccess").innerHTML = "";
+    }
 }
-
-$(document).ready(init);
 $(document).ready(getOrderList);
+$(document).ready(init);
+
 
 

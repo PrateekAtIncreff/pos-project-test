@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,6 +35,7 @@ public class LoginController {
 	private UserService service;
 	@Autowired
 	private InfoData info;
+
 	
 	@ApiOperation(value = "Logs in a user")
 	@RequestMapping(path = "/session/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -41,10 +43,10 @@ public class LoginController {
 		UserPojo p = service.get(f.getEmail());
 		boolean authenticated = (p != null && Objects.equals(p.getPassword(), f.getPassword()));
 		if (!authenticated) {
-			info.setMessage("Invalid username or password");
-			return new ModelAndView("redirect:/site/login");
+			info.setMessage("Invalid details");
+			throw new ApiException("Invalid details");
 		}
-
+		info.setRole(p.getRole());
 		// Create authentication object
 		Authentication authentication = convert(p);
 		// Create new session
@@ -56,6 +58,19 @@ public class LoginController {
 
 		return new ModelAndView("redirect:/ui/home");
 
+	}
+
+	@ApiOperation(value = "Sign Up a new user")
+	@RequestMapping(path = "/session/signup", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+	public ModelAndView signup(HttpServletRequest req, LoginForm form) throws ApiException{
+		boolean success = service.add(form);
+
+		if(!success){
+			info.setMessage("Email already exists");
+			throw new ApiException("Email already exists");
+		}
+		ModelAndView mav = login(req, form);
+		return mav;
 	}
 
 	@RequestMapping(path = "/session/logout", method = RequestMethod.GET)
@@ -80,5 +95,6 @@ public class LoginController {
 				authorities);
 		return token;
 	}
+
 
 }

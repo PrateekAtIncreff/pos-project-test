@@ -14,10 +14,12 @@ public class InfoData implements Serializable {
 
 	private String message;
 	private String email;
+	private String role;
 
 	public InfoData() {
-		message = "No message";
+		message = "";
 		email = "No email";
+		role="operator";
 	}
 	
 	public String getMessage() {
@@ -36,4 +38,11 @@ public class InfoData implements Serializable {
 		this.email = email;
 	}
 
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
 }

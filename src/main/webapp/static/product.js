@@ -1,16 +1,19 @@
 
-function getBrandUrl(){
+function getProductUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/product";
 }
-
+function getAdminProductUrl(){
+    var baseUrl = $("meta[name=baseUrl]").attr("content")
+    return baseUrl + "/api/admin/product";
+}
 //BUTTON ACTIONS
-function addBrand(event){
+function addProduct(event){
 	//Set the values to update
 	var $form = $("#product-form");
 	var json = toJson($form);
 	console.log(json);
-	var url = getBrandUrl();
+	var url = getAdminProductUrl();
 
 	$.ajax({
 	   url: url,
@@ -20,7 +23,7 @@ function addBrand(event){
        	'Content-Type': 'application/json'
        },
 	   success: function(response) {
-	   		getBrandList();
+	   		refresh();
 	   },
 	   error: handleAjaxError
 	});
@@ -28,11 +31,11 @@ function addBrand(event){
 	return false;
 }
 
-function updateBrand(event){
+function updateProduct(event){
 	$('#edit-product-modal').modal('toggle');
 	//Get the ID
 	var id = $("#product-edit-form input[name=id]").val();
-	var url = getBrandUrl() + "/" + id;
+	var url = getAdminProductUrl() + "/" + id;
 
 	//Set the values to update
 	var $form = $("#product-edit-form");
@@ -46,7 +49,7 @@ function updateBrand(event){
        	'Content-Type': 'application/json'
        },
 	   success: function(response) {
-	   		getBrandList();
+	   		getProductList();
 	   },
 	   error: handleAjaxError
 	});
@@ -55,13 +58,13 @@ function updateBrand(event){
 }
 
 
-function getBrandList(){
-	var url = getBrandUrl();
+function getProductList(){
+	var url = getProductUrl();
 	$.ajax({
 	   url: url,
 	   type: 'GET',
 	   success: function(data) {
-	   		displayBrandList(data);
+	   		displayProductList(data);
 	   },
 	   error: handleAjaxError
 	});
@@ -112,7 +115,7 @@ function uploadRows(){
 	processCount++;
 
 	var json = JSON.stringify(row);
-	var url = getBrandUrl();
+	var url = getAdminProductUrl();
     console.log(json);
 	//Make ajax call
 	$.ajax({
@@ -140,12 +143,18 @@ function downloadErrors(){
 
 //UI DISPLAY METHODS
 
-function displayBrandList(data){
+function displayProductList(data){
 	var $tbody = $('#product-table').find('tbody');
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = ' <button onclick="displayEditBrand(' + e.id + ')">edit</button>'
+		var roleElement = document.getElementById('role');
+        var role = roleElement.innerText;
+        if(role=="operator"){
+            var buttonHtml = ' <button class="edit_btn" disabled>edit</button>'
+        }
+        else
+		    var buttonHtml = ' <button onclick="displayEditProduct(' + e.id + ')">edit</button>'
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.barcode + '</td>'
@@ -158,13 +167,13 @@ function displayBrandList(data){
 	}
 }
 
-function displayEditBrand(id){
-	var url = getBrandUrl() + "/" + id;
+function displayEditProduct(id){
+	var url = getProductUrl() + "/" + id;
 	$.ajax({
 	   url: url,
 	   type: 'GET',
 	   success: function(data) {
-	   		displayBrand(data);
+	   		displayProduct(data);
 	   },
 	   error: handleAjaxError
 	});
@@ -200,7 +209,7 @@ function displayUploadData(){
 	$('#upload-product-modal').modal('toggle');
 }
 
-function displayBrand(data){
+function displayProduct(data){
 	$("#product-edit-form input[name=barcode]").val(data.barcode);
 	$("#product-edit-form input[name=brand_category]").val(data.brand_category);
 	$("#product-edit-form input[name=name]").val(data.name);
@@ -215,15 +224,25 @@ function refresh(){
 
 //INITIALIZATION CODE
 function init(){
-	$('#add-product').click(addBrand);
-	$('#update-product').click(updateBrand);
+	$('#add-product').click(addProduct);
+	$('#update-product').click(updateProduct);
 	$('#refresh-data').click(refresh);
 	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
-    $('#productFile').on('change', updateFileName)
+    $('#productFile').on('change', updateFileName);
+
+    var roleElement = document.getElementById('role');
+    var role = roleElement.innerText;
+
+    if(role=="operator"){
+        document.getElementById("add-product").disabled = true;
+        document.getElementById("update-product").disabled = true;
+        document.getElementById("upload-data").disabled = true;
+        document.getElementById("process-data").disabled = true;
+    }
 }
 
 $(document).ready(init);
-$(document).ready(getBrandList);
+$(document).ready(getProductList);
 

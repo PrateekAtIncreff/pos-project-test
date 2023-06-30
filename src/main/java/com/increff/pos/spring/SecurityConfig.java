@@ -24,10 +24,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/**")//
 				.antMatchers("/ui/**")//
 				.and().authorizeRequests()//
-				.antMatchers("/api/admin/**").hasAuthority("admin")//
-				.antMatchers("/api/**").hasAnyAuthority("admin", "standard")//
-				.antMatchers("/ui/admin/**").hasAuthority("admin")//
-				.antMatchers("/ui/**").hasAnyAuthority("admin", "standard")//
+				.antMatchers("/api/admin/**").hasAnyAuthority("admin", "supervisor")//
+				.antMatchers("/api/**").hasAnyAuthority("admin", "operator", "supervisor")//
+				.antMatchers("/ui/admin/**").hasAnyAuthority("admin", "supervisor")//
+				.antMatchers("/ui/**").hasAnyAuthority("admin", "operator", "supervisor")//
 				// Ignore CSRF and CORS
 				.and().csrf().disable().cors().disable();
 		logger.info("Configuration complete");

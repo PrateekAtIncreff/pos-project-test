@@ -3,14 +3,17 @@ function getBrandUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/brand";
 }
-
+function getAdminBrandUrl(){
+    var baseUrl = $("meta[name=baseUrl]").attr("content")
+    	return baseUrl + "/api/admin/brand";
+}
 //BUTTON ACTIONS
 function addBrand(event){
 	//Set the values to update
 	var $form = $("#brand-form");
 	var json = toJson($form);
 	console.log(json);
-	var url = getBrandUrl();
+	var url = getAdminBrandUrl();
 
 	$.ajax({
 	   url: url,
@@ -20,7 +23,7 @@ function addBrand(event){
        	'Content-Type': 'application/json'
        },
 	   success: function(response) {
-	   		getBrandList();
+	   		refresh();
 	   },
 	   error: handleAjaxError
 	});
@@ -32,7 +35,7 @@ function updateBrand(event){
 	$('#edit-brand-modal').modal('toggle');
 	//Get the ID
 	var id = $("#brand-edit-form input[name=id]").val();
-	var url = getBrandUrl() + "/" + id;
+	var url = getAdminBrandUrl() + "/" + id;
 
 	//Set the values to update
 	var $form = $("#brand-edit-form");
@@ -113,7 +116,7 @@ function uploadRows(){
 	processCount++;
 
 	var json = JSON.stringify(row);
-	var url = getBrandUrl();
+	var url = getAdminBrandUrl();
     console.log(json);
 	//Make ajax call
 	$.ajax({
@@ -146,13 +149,20 @@ function displayBrandList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = ' <button onclick="displayEditBrand(' + e.id + ')">edit</button>'
+		var roleElement = document.getElementById('role');
+        var role = roleElement.innerText;
+        if(role=="operator"){
+        var buttonHtml = ' <button class="edit_btn" onclick="displayEditBrand(' + e.id + ')" disabled>edit</button>'
+        }
+        else
+		    var buttonHtml = ' <button onclick="displayEditBrand(' + e.id + ')">edit</button>';
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.brand + '</td>'
 		+ '<td>'  + e.category + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
+
         $tbody.append(row);
 	}
 }
@@ -218,8 +228,18 @@ function init(){
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
     $('#brandFile').on('change', updateFileName);
-}
+    var roleElement = document.getElementById('role');
+    var role = roleElement.innerText;
 
-$(document).ready(init);
+    if(role=="operator"){
+        document.getElementById("add-brand").disabled = true;
+        document.getElementById("update-brand").disabled = true;
+        document.getElementById("process-data").disabled = true;
+        document.getElementById("download-errors").disabled = true;
+        document.getElementById("upload-data").disabled=true;
+    }
+}
 $(document).ready(getBrandList);
+$(document).ready(init);
+
 

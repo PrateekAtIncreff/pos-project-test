@@ -34,8 +34,8 @@ public class ReportsApiController {
     public List<SchedulerPojo> getScheduledData(){
         return schedulerService.getAll();
     }
-    @ApiOperation(value = "Gets list of scheduler report")
-    @RequestMapping(path = "/api/reports/scheduler/generate", method = RequestMethod.GET)
+    @ApiOperation(value = "Generates scheduler report")
+    @RequestMapping(path = "/api/admin/reports/scheduler/generate", method = RequestMethod.GET)
     public void generateDailyReport() throws ApiException {
         scheduler.createReport();
     }

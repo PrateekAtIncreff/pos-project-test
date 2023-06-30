@@ -3,35 +3,17 @@ function getInventoryUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/inventory";
 }
-
-//BUTTON ACTIONS
-function addInventory(event){
-	//Set the values to update
-	var $form = $("#inventory-form");
-	var json = toJson($form);
-	var url = getInventoryUrl();
-
-	$.ajax({
-	   url: url,
-	   type: 'POST',
-	   data: json,
-	   headers: {
-       	'Content-Type': 'application/json'
-       },
-	   success: function(response) {
-	   		getInventoryList();
-	   },
-	   error: handleAjaxError
-	});
-
-	return false;
+function getAdminInventoryUrl(){
+    var baseUrl = $("meta[name=baseUrl]").attr("content")
+    return baseUrl + "/api/admin/inventory";
 }
 
+//BUTTON ACTIONS
 function updateInventory(event){
 	$('#edit-inventory-modal').modal('toggle');
 	//Get the ID
 	var id = $("#inventory-edit-form input[name=id]").val();
-	var url = getInventoryUrl() + "/" + id;
+	var url = getAdminInventoryUrl() + "/" + id;
 
 	//Set the values to update
 	var $form = $("#inventory-edit-form");
@@ -96,7 +78,7 @@ function uploadRows(){
 	processCount++;
     id = row.id;
 	var json = JSON.stringify(row);
-	var url = getInventoryUrl() + "/" + id;
+	var url = getAdminInventoryUrl() + "/" + id;
 
 	//Make ajax call
 	$.ajax({
@@ -129,7 +111,13 @@ function displayInventoryList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = ' <button onclick="displayEditInventory(' + e.id + ')">edit</button>'
+		var roleElement = document.getElementById('role');
+        var role = roleElement.innerText;
+        if(role=="operator"){
+            var buttonHtml = ' <button class="edit_btn" disabled>edit</button>'
+        }
+        else
+		    var buttonHtml = ' <button onclick="displayEditInventory(' + e.id + ')">edit</button>'
 		var row = '<tr>'
 		+ '<td>' + e.barcode + '</td>'
 		+ '<td>' + e.quantity + '</td>'
@@ -192,13 +180,21 @@ function refresh(){
 }
 //INITIALIZATION CODE
 function init(){
-	$('#add-inventory').click(addInventory);
 	$('#update-inventory').click(updateInventory);
 	$('#refresh-data').click(refresh);
 	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
-    $('#inventoryFile').on('change', updateFileName)
+    $('#inventoryFile').on('change', updateFileName);
+
+    var roleElement = document.getElementById('role');
+    var role = roleElement.innerText;
+
+    if(role=="operator"){
+        document.getElementById("update-inventory").disabled = true;
+        document.getElementById("upload-data").disabled = true;
+        document.getElementById("process-data").disabled = true;
+    }
 }
 
 $(document).ready(init);

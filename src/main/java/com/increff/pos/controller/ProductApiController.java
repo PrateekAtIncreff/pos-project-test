@@ -25,7 +25,7 @@ public class ProductApiController {
     @Autowired
     private ProductService service;
     @ApiOperation(value = "Adds a brand-category combination to database")
-    @RequestMapping(path = "/api/product", method = RequestMethod.POST)
+    @RequestMapping(path = "/api/admin/product", method = RequestMethod.POST)
     public void add(@RequestBody ProductForm form) throws ApiException{
         ProductPojo pojo = convert(form);
         service.add(pojo);
@@ -49,7 +49,7 @@ public class ProductApiController {
     }
 
     @ApiOperation(value = "Updates a record")
-    @RequestMapping(path = "/api/product/{id}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/api/admin/product/{id}", method = RequestMethod.PUT)
     public void update(@PathVariable int id, @RequestBody ProductForm form) throws ApiException{
         ProductPojo pojo = convert(form);
         service.update(id, pojo);

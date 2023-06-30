@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.increff.pos.model.LoginForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,19 +12,26 @@ import com.increff.pos.dao.UserDao;
 import com.increff.pos.pojo.UserPojo;
 
 @Service
-public class UserService {
-
+public class UserService{
+	@Autowired
+	private AboutAppService service;
 	@Autowired
 	private UserDao dao;
 
 	@Transactional
-	public void add(UserPojo p) throws ApiException {
+	public boolean add(LoginForm form) throws ApiException {
+		UserPojo p= convert(form);
+
 		normalize(p);
+
 		UserPojo existing = dao.select(p.getEmail());
 		if (existing != null) {
-			throw new ApiException("User with given email already exists");
+			return false;
 		}
+
 		dao.insert(p);
+
+		return true;
 	}
 
 	@Transactional(rollbackOn = ApiException.class)
@@ -41,6 +49,18 @@ public class UserService {
 		dao.delete(id);
 	}
 
+	protected UserPojo convert(LoginForm form){
+		UserPojo pojo = new UserPojo();
+		pojo.setEmail(form.getEmail());
+		pojo.setPassword(form.getPassword());
+		if(service.getSupervisor().equals(pojo.getEmail())){
+			pojo.setRole("supervisor");
+		}
+		else{
+			pojo.setRole("operator");
+		}
+		return pojo;
+	}
 	protected static void normalize(UserPojo p) {
 		p.setEmail(p.getEmail().toLowerCase().trim());
 		p.setRole(p.getRole().toLowerCase().trim());

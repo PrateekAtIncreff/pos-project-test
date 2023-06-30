@@ -11,7 +11,11 @@ public class AboutAppService {
 	@Value("${app.version}")
 	
 	private String version;
-	
+
+	@Value("${app.supervisor}")
+	private String supervisor;
+
+
 	public String getName() {
 		return name;
 	}
@@ -20,4 +24,7 @@ public class AboutAppService {
 		return version;
 	}
 
+	public String getSupervisor() {
+		return supervisor;
+	}
 }

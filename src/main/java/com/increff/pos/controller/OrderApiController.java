@@ -26,14 +26,14 @@ public class OrderApiController {
     OrderItemService orderItemService;
 
     @ApiOperation(value = "Adds a order combination to database")
-    @RequestMapping(path = "/api/order", method = RequestMethod.POST)
+    @RequestMapping(path = "/api/admin/order", method = RequestMethod.POST)
     public int add(@RequestBody List<OrderItemForm> forms) throws ApiException{
       return  orderService.add(forms);
 
     }
 
     @ApiOperation(value = "Checks if the entered form is valid for submission")
-    @RequestMapping(path = "/api/order/check", method = RequestMethod.POST)
+    @RequestMapping(path = "/api/admin/order/check", method = RequestMethod.POST)
     public void checking(@RequestBody OrderItemForm form) throws ApiException{
         orderService.checkValidity(form);
     }

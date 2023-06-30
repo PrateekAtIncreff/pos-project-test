@@ -36,7 +36,7 @@ public class InventoryApiController {
         return dataList;
     }
     @ApiOperation(value = "Updates a record")
-    @RequestMapping(path = "/api/inventory/{id}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/api/admin/inventory/{id}", method = RequestMethod.PUT)
     public void update(@PathVariable int id, @RequestBody InventoryForm form) throws ApiException{
         InventoryPojo pojo = convert(form);
         service.update(id, pojo);
