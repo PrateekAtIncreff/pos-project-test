@@ -6,6 +6,12 @@ function getSalesReportUrl(){
 
 
 function getSalesList(event) {
+    var dateInput = document.getElementById("inputSD");
+    var dateInput2 = document.getElementById("inputED");
+    if((!dateInput.value) || (!dateInput2.value) ){
+        alert("Do not keep date field empty");
+        return;
+    }
     var $form = $("#sales-form");
     var json = toJson($form);
     var url = getSalesReportUrl();
@@ -26,6 +32,7 @@ function getSalesList(event) {
 }
 
 let initialData = [];
+let filteredData = [];
 //UI DISPLAY METHODS
 
 function displayFilteredReport(){
@@ -40,6 +47,7 @@ function displayFilteredReport(){
     brand = brand.toLowerCase().trim();
     category = category.toLowerCase().trim();
     var flag = 0;
+    filteredData = [];
     for(var i in initialData){
         var element = initialData[i];
         if(element.brand == brand){
@@ -51,6 +59,7 @@ function displayFilteredReport(){
                 		+ '<td>' + element.revenue + '</td>'
                 		+ '</tr>';
                 $tbody.append(row);
+                filteredData.push(element);
                 flag=1;
             }
             else if(element.category == category){
@@ -61,6 +70,7 @@ function displayFilteredReport(){
                     + '<td>' + element.revenue + '</td>'
                     + '</tr>';
             $tbody.append(row);
+            filteredData.push(element);
             flag=1;
             }
         }
@@ -76,6 +86,7 @@ function displaySalesReportList(data){
 	var $tbody = $('#brand-report-table').find('tbody');
 	$tbody.empty();
 	initialData = data;
+	filteredData = data;
 	for(var i in data){
 		var e = data[i];
 		var row = '<tr>'
@@ -98,6 +109,9 @@ function displaySalesReportList(data){
 function validateDate(input) {
   var dateFormat = /^\d{4}-\d{2}-\d{2}$/;
   var today = new Date();
+  if(!input.value){
+      alert("Date field cannot be empty");
+    }
   var inputDate = new Date(input.value);
      if (inputDate > today) {
         alert("Input date cannot be after today's date.");

@@ -20,6 +20,10 @@ function login(event){
     // Get form data
     var username = $('#email').val();
     var password = $('#password').val();
+    if(password==null ||password==""){
+            alert("Password cannot be empty");
+            return true;
+        }
     if(!ValidateEmail(formData[0].value)){
         return true;
     }
@@ -52,6 +56,10 @@ function signup(event){
     // Get form data
     var username = $('#email').val();
     var password = $('#password').val();
+    if(password==null ||password==""){
+        alert("Password cannot be empty");
+        return true;
+    }
     if(!ValidateEmail(formData[0].value)){
         return true;
     }

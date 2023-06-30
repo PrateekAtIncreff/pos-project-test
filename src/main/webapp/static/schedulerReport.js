@@ -18,9 +18,16 @@ function getSchedulerList(){
 }
 
 function getFilteredList(event) {
+    var dateInput = document.getElementById("inputSD");
+    var dateInput2 = document.getElementById("inputED");
+    if((!dateInput.value) || (!dateInput2.value) ){
+        alert("Do not keep date field empty");
+        return;
+    }
     var $form = $("#sales-form");
     var json = toJson($form);
     var url = getSchedulerReportUrl();
+
     $.ajax({
         url: url,
         type: "POST",
@@ -40,8 +47,9 @@ function getFilteredList(event) {
 
 
 //UI DISPLAY METHODS
-
+let filteredData = [];
 function displaySchedulerReportList(data){
+    filteredData = data;
 	var $tbody = $('#brand-report-table').find('tbody');
 	$tbody.empty();
 	for(var i in data){
@@ -64,6 +72,9 @@ function resetForm() {
 function validateDate(input) {
   var dateFormat = /^\d{4}-\d{2}-\d{2}$/;
   var today = new Date();
+  if(!input.value){
+    alert("Date field cannot be empty");
+  }
   var inputDate = new Date(input.value);
      if (inputDate > today) {
         alert("Input date cannot be after today's date.");

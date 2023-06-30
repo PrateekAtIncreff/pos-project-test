@@ -21,7 +21,9 @@ public class UserService{
 	@Transactional
 	public boolean add(LoginForm form) throws ApiException {
 		UserPojo p= convert(form);
-
+		if(p.getPassword()==null || p.getPassword() == ""){
+			throw new ApiException("Password cannot be empty");
+		}
 		normalize(p);
 
 		UserPojo existing = dao.select(p.getEmail());
