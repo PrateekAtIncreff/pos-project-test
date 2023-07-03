@@ -79,6 +79,10 @@ function displayFilteredReport(){
     if(flag == 0){
         var row = '<tr><td>No transaction for given brand - category found in given timeframe</td></tr>';
         $tbody.append(row);
+        document.getElementById("download-report").disabled = true;
+    }
+    else{
+        $("#download-report").removeAttr("disabled");
     }
 
 }
@@ -100,11 +104,37 @@ function displaySalesReportList(data){
 	if(data.length < 1){
 	    var row = '<tr><td>No transaction for given timeframe found</td></tr>';
 	    $tbody.append(row);
+	    document.getElementById("download-report").disabled = true;
+	}
+	else{
+	    $("#download-report").removeAttr("disabled");
 	}
 	$("#apply-brand-filter").removeAttr("disabled");
 	$("#refresh-data").removeAttr("disabled");
 }
 
+function downloadReport(){
+    var headers = {
+        brand: 'brand'.replace(/,/g, ''), // remove commas to avoid errors
+        category: "category",
+        quantity: "quantity",
+        revenue: "revenue"
+    };
+    var dataFormatted = [];
+
+    // format the data
+    filteredData.forEach((item) => {
+        dataFormatted.push({
+            brand: item.brand.replace(/,/g, ''), // remove commas to avoid errors,
+            category: item.category.replace(/,/g, ''),
+            quantity: item.quantity,
+            revenue: item.revenue
+        });
+    });
+
+    var fileTitle = 'SalesReport';
+    exportCSVFile(headers, dataFormatted, fileTitle);
+}
 
 function validateDate(input) {
   var dateFormat = /^\d{4}-\d{2}-\d{2}$/;
@@ -129,6 +159,7 @@ function init() {
    $("#apply-filter").click(getSalesList);
    $("#apply-brand-filter").click(displayFilteredReport);
    $("#refresh-data").click(refreshData);
+   $("#download-report").click(downloadReport);
 
     var dateInput = document.getElementById("inputSD");
     var dateInput2 = document.getElementById("inputED");

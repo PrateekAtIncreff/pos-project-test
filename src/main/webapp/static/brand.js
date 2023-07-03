@@ -145,6 +145,14 @@ function downloadErrors(){
 //UI DISPLAY METHODS
 
 function displayBrandList(data){
+//    $('#brand-table').DataTable({
+//    data:brandData,
+//    "columns":[
+//    {"data":"id"},
+//    {"data":"brand"},
+//    {"data":"category"}
+//    ]
+//    });
 	var $tbody = $('#brand-table').find('tbody');
 	$tbody.empty();
 	for(var i in data){
@@ -238,6 +246,7 @@ function init(){
         document.getElementById("download-errors").disabled = true;
         document.getElementById("upload-data").disabled=true;
     }
+//    $('#brand-table').DataTable();
 }
 $(document).ready(getBrandList);
 $(document).ready(init);
